@@ -1,58 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mark (Marketing Community)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Mark is a content-driven platform for managing, processing, and publishing curated information from external websites.  
+This repository currently documents the initial phase of the project and the planned system architecture. The platform itself is not yet fully developed.
 
-## About Laravel
+## Project Goal
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The goal of Mark is to build a workflow for:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- managing content sources
+- crawling and storing raw content
+- processing and validating extracted data
+- enriching content using AI
+- reviewing and publishing final content
+- providing access through a web app, admin panel, and Telegram bot
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Current Phase
 
-## Learning Laravel
+This phase focuses on planning and defining the system structure.  
+The project is not yet production-ready and implementation is still in progress.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Planned Features
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Source Management
+Manage content sources, settings, and crawling configurations.
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+### 2. Crawling
+- Run scheduled or manual crawl jobs
+- Fetch content from external websites
+- Store raw content for later processing
 
-## Agentic Development
+### 3. Content Processing
+- Extraction of meaningful data from raw pages
+- Validation of collected data
+- Deduplication of repeated content
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 4. Content Enrichment
+- AI-powered content enhancement
+- Revision history for enriched content
+- Optional human review before publishing
 
-```bash
-composer require laravel/boost --dev
+### 5. Content Management
+- Review and approval workflow
+- Publishing content
+- Search and query capabilities
 
-php artisan boost:install
-```
+## Planned Access Methods
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+The platform will be accessible through:
 
-## Contributing
+- Web application
+- Admin panel
+- Telegram bot
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+OTP authentication is not planned for this project.
 
-## Code of Conduct
+## Planned Tech Stack
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- **Backend:** Laravel 13
+- **Frontend:** Vue.js
+- **Database:** MySQL
+- **Cache / Queue / Temporary Data:** Redis
+- **Web Server:** Nginx
+- **AI Integration:** OpenAI
 
-## Security Vulnerabilities
+## System Overview
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+The expected flow of the system is:
+
+1. Define and manage sources
+2. Crawl content from external websites
+3. Store raw data
+4. Extract and validate content
+5. Deduplicate records
+6. Enrich content with AI
+7. Review and publish final content
+8. Provide access through the admin panel, website, and Telegram bot
+
+## External Integrations
+
+The project is expected to integrate with:
+
+- external websites as content sources
+- OpenAI for AI-based content enrichment
+- Telegram for bot-based access and notifications
+
+## Testing
+
+Automated tests will be written as part of the implementation process.
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the MIT License.
+
+## Status
+
+- Project phase: Planning / Initial development
+- Production ready: No
+- Documentation: In progress

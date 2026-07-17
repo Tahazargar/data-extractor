@@ -1,0 +1,11 @@
+{
+    "name": "SourceManagment",
+    "alias": "sourcemanagment",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\SourceManagment\\Providers\\SourceManagmentServiceProvider"
+    ],
+    "files": []
+}

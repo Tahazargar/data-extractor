@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/sourcemanagment",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\SourceManagment\\": "app/",
+            "Modules\\SourceManagment\\Database\\Factories\\": "database/factories/",
+            "Modules\\SourceManagment\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\SourceManagment\\Tests\\": "tests/"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "name": "ContentManagement",
+    "alias": "contentmanagement",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ContentManagement\\Providers\\ContentManagementServiceProvider"
+    ],
+    "files": []
+}

@@ -1,0 +1,7 @@
+{
+    "SourceManagment": true,
+    "Crawling": true,
+    "ContentProcessing": true,
+    "ContentEnrichment": true,
+    "ContentManagement": true
+}

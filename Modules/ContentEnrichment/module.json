@@ -1,0 +1,11 @@
+{
+    "name": "ContentEnrichment",
+    "alias": "contentenrichment",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\ContentEnrichment\\Providers\\ContentEnrichmentServiceProvider"
+    ],
+    "files": []
+}

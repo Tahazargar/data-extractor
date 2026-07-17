@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/contentmanagement",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\ContentManagement\\": "app/",
+            "Modules\\ContentManagement\\Database\\Factories\\": "database/factories/",
+            "Modules\\ContentManagement\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\ContentManagement\\Tests\\": "tests/"
+        }
+    }
+}
