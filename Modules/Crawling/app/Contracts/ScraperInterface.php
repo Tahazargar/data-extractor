@@ -10,11 +10,11 @@ interface ScraperInterface
      * @param string $url
      * @return array
      */
-    public static function scrapeArticle(string $url): ScraperResult;
+    public function scrapeArticle(string $url): ScraperResult;
 
     /**
      * @param string $html
      * @return array
      */
-    public static function parseDetails(string $html): ScraperResult;
+    public function parseDetails(string $html): ScraperResult;
 }

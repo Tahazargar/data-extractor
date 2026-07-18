@@ -7,6 +7,16 @@ use Illuminate\Console\Scheduling\Schedule;
 
 class SourceManagmentServiceProvider extends ModuleServiceProvider
 {
+
+    public function register(): void
+    {
+        $this->mergeConfigFrom(
+            module_path('SourceManagment', 'config/scrapers.php'),
+            'scrapers'
+        );
+    }
+
+
     /**
      * The name of the module.
      */

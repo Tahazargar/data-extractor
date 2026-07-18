@@ -4,25 +4,26 @@ namespace Modules\Crawling\Services\Scrapers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Modules\Crawling\Contracts\ScraperInterface;
 use Modules\Crawling\DTOs\ScraperResult;
-use Modules\Crawling\Helpers\Helpers;
+use Modules\Crawling\Support\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
-use Illuminate\Support\Facades\Http;
 
 class SimonSinekScraper implements ScraperInterface
 {
     /**
      * @throws ConnectionException
      */
-    public static function scrapeArticle(string $url): ScraperResult
+    public function scrapeArticle(string $url): ScraperResult
     {
         $response = Http::get($url);
 
         return SimonSinekScraper::parseDetails($response->body());
     }
 
-    public static function parseDetails(string $html): ScraperResult
+    public function parseDetails(string $html): ScraperResult
     {
         $crawler = new Crawler($html);
 

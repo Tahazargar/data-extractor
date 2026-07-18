@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Crawling\Helpers;
+namespace Modules\Crawling\Support;
 
 use Symfony\Component\DomCrawler\Crawler;
 
