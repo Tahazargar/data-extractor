@@ -5,7 +5,6 @@ namespace Modules\Crawling\Services\Scrapers;
 use Carbon\Carbon;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Modules\Crawling\Contracts\ScraperInterface;
 use Modules\Crawling\DTOs\ScraperResult;
 use Modules\Crawling\Support\Helpers;
@@ -20,10 +19,10 @@ class SimonSinekScraper implements ScraperInterface
     {
         $response = Http::get($url);
 
-        return SimonSinekScraper::parseDetails($response->body());
+        return SimonSinekScraper::parseDetails($response->body(), $url);
     }
 
-    public function parseDetails(string $html): ScraperResult
+    public function parseDetails(string $html, string $url): ScraperResult
     {
         $crawler = new Crawler($html);
 
@@ -32,6 +31,7 @@ class SimonSinekScraper implements ScraperInterface
 
         // Example: Extract content while preserving HTML structure for bold/subtitles
         $content = $crawler->filter('.prose')->html();
+        $contentHash = Helpers::contentHashGenerator($content);
 
         $author = Helpers::extractMetaByIcon($crawler, 'pen-line');
         $readTime =   Helpers::extractMetaByIcon($crawler, 'clock');
@@ -43,11 +43,19 @@ class SimonSinekScraper implements ScraperInterface
         // Transform to CarbonInterface
         $datePublished = Carbon::parse($datePublished);
 
+        $status = "successful";
+
+        $domain = Helpers::extractDomain($url);
+
         return ScraperResult::successfulScrapeArticle(
             title: $title,
             content: $content,
+            domain: $domain,
+            url: $url,
+            contentHash: $contentHash,
             author: $author,
             readTime: $readTime,
+            status: $status,
             date: $datePublished,
         );
     }

@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Support\Facades\Log;
+use Modules\Crawling\Events\CrawlingFinishEvent;
 use Modules\Crawling\Services\CrawlingService;
 
 final class CrawlUrlJob implements ShouldQueue
@@ -15,7 +16,6 @@ final class CrawlUrlJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public int $tries = 3;
-
     public int $timeout = 300;
 
     public function __construct(
@@ -30,10 +30,7 @@ final class CrawlUrlJob implements ShouldQueue
     public function handle(CrawlingService $crawlingService): void {
         $articleData = $crawlingService->process($this->url);
 
-        Log::info('URL crawled successfully.', [
-            'URL' => $this->url,
-            'Article Data' => $articleData,
-        ]);
+        CrawlingFinishEvent::dispatch($articleData);
     }
 
     public function backoff(): array

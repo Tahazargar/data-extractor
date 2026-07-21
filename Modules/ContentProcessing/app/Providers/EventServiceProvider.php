@@ -3,6 +3,8 @@
 namespace Modules\ContentProcessing\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
+use Modules\ContentProcessing\Listeners\CrawlingFinishListener;
+use Modules\Crawling\Events\CrawlingFinishEvent;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -11,7 +13,11 @@ class EventServiceProvider extends ServiceProvider
      *
      * @var array<string, array<int, string>>
      */
-    protected $listen = [];
+    protected $listen = [
+        CrawlingFinishEvent::class => [
+            CrawlingFinishListener::class
+        ]
+    ];
 
     /**
      * Indicates if events should be discovered.

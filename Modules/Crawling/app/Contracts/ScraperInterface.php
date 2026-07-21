@@ -16,5 +16,5 @@ interface ScraperInterface
      * @param string $html
      * @return array
      */
-    public function parseDetails(string $html): ScraperResult;
+    public function parseDetails(string $html, string $url): ScraperResult;
 }
