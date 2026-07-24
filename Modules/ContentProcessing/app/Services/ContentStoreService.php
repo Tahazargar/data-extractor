@@ -5,9 +5,13 @@ namespace Modules\ContentProcessing\Services;
 use Illuminate\Support\Facades\Log;
 use Modules\ContentProcessing\Models\ScrapedContent;
 use Modules\Crawling\DTOs\ScraperResult;
+use Modules\Crawling\Exceptions\InsertScrapedContentException;
 
 class ContentStoreService
 {
+    /**
+     * @throws InsertScrapedContentException
+     */
     public static function store(ScraperResult $scraperResult): void
     {
         try {
@@ -23,8 +27,8 @@ class ContentStoreService
             }
 
             ScrapedContent::create($scraperResult->toArray());
-        } catch (\Exception $e) {
-            Log::error("Insert Scraped Content Failed: " . $e->getMessage());
+        } catch (\Throwable $e) {
+            throw new InsertScrapedContentException($scraperResult->url, $e);
         }
 
     }

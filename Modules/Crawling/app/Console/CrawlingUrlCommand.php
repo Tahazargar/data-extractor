@@ -4,7 +4,7 @@ namespace Modules\Crawling\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Schedule;
-use Modules\Crawling\Jobs\CrawlUrlJob;
+use Modules\Crawling\Jobs\ScrapeArticleJob;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -35,7 +35,7 @@ class CrawlingUrlCommand extends Command
      */
     public function handle()
     {
-        Schedule::job(new CrawlUrlJob($this->url));
+        Schedule::job(new ScrapeArticleJob($this->url));
     }
 
     /**

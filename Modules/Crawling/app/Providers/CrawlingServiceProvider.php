@@ -2,6 +2,7 @@
 
 namespace Modules\Crawling\Providers;
 
+use Modules\Crawling\Console\ScrapeArchives;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -34,13 +35,12 @@ class CrawlingServiceProvider extends ModuleServiceProvider
         RouteServiceProvider::class,
     ];
 
-    /**
-     * Define module schedules.
-     * 
-     * @param $schedule
-     */
-    // protected function configureSchedules(Schedule $schedule): void
-    // {
-    //     $schedule->command('inspire')->hourly();
-    // }
+    public function boot(): void
+    {
+        if($this->app->runningInConsole()){
+            $this->commands([
+                ScrapeArchives::class,
+            ]);
+        }
+    }
 }

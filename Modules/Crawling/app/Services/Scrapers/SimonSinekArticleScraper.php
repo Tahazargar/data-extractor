@@ -3,26 +3,14 @@
 namespace Modules\Crawling\Services\Scrapers;
 
 use Carbon\Carbon;
-use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Support\Facades\Http;
-use Modules\Crawling\Contracts\ScraperInterface;
+use Modules\Crawling\Contracts\ArticleScraperInterface;
 use Modules\Crawling\DTOs\ScraperResult;
 use Modules\Crawling\Support\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
 
-class SimonSinekScraper implements ScraperInterface
+class SimonSinekArticleScraper implements ArticleScraperInterface
 {
-    /**
-     * @throws ConnectionException
-     */
-    public function scrapeArticle(string $url): ScraperResult
-    {
-        $response = Http::get($url);
-
-        return SimonSinekScraper::parseDetails($response->body(), $url);
-    }
-
-    public function parseDetails(string $html, string $url): ScraperResult
+    public static function parseDetails(string $html, string $url): ScraperResult
     {
         $crawler = new Crawler($html);
 
@@ -58,5 +46,29 @@ class SimonSinekScraper implements ScraperInterface
             status: $status,
             date: $datePublished,
         );
+    }
+
+    public static function extractArticleUrls(string $html): array
+    {
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html);
+        $xpath = new \DOMXPath($dom);
+
+        $urls = [];
+
+        // Adjust selector to match the actual <a> inside <article>
+        $nodes = $xpath->query('//article//a[@href]');
+
+        foreach ($nodes as $node) {
+            $href = $node->getAttribute('href');
+
+            if(str_starts_with($href, '/')) {
+                $href = "https://simonsinek.com" . $href;
+            }
+
+            $urls[] = $href;
+        }
+
+        return array_unique($urls);
     }
 }

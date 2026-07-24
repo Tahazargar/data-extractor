@@ -24,9 +24,23 @@ class Helpers
         return $host !== null ? preg_replace('/^www\./', '', $host) : null;
     }
 
-    public static function contentHashGenerator(string $content): string
+    public static function extractCleanText(string $html): string
     {
-        return hash('sha256', $content);
+        $crawler = new Crawler($html);
+
+        // Remove noisy/non-content nodes before extracting text
+        $crawler->filter('script, style, iframe, .ads, .comments, .share-buttons')
+            ->each(fn (Crawler $node) => $node->getNode(0)?->parentNode?->removeChild($node->getNode(0)));
+
+        return trim($crawler->filter('body')->text(''));
     }
 
+    public static function contentHashGenerator(string $content): string
+    {
+        $cleanText = self::extractCleanText($content);
+
+        $normalizedContent = $normalizedContent = trim(preg_replace('/\s+/', ' ', strtolower($cleanText)) ?? '');
+
+        return hash('sha256', $normalizedContent);
+    }
 }

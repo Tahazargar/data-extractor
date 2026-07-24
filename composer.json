@@ -12,7 +12,8 @@
         "nwidart/laravel-modules": "^13.0",
         "predis/predis": "^3.5",
         "symfony/css-selector": "^8.1",
-        "symfony/dom-crawler": "^8.1"
+        "symfony/dom-crawler": "^8.1",
+        "ext-dom": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
