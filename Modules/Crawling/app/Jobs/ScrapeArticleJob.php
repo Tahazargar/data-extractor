@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Modules\Crawling\Events\CrawlingFinishEvent;
 use Modules\Crawling\Exceptions\ScrapeArticleJobFailedException;
+use Modules\Crawling\Services\Rules\FetchRule;
 
 final class ScrapeArticleJob implements ShouldQueue
 {
@@ -30,7 +31,9 @@ final class ScrapeArticleJob implements ShouldQueue
      * @throws ScrapeArticleJobFailedException
      * @throws ConnectionException
      */
-    public function handle(): void {
+    public function handle(FetchRule $fetchRule): void {
+        $fetchRule->shouldFetch($this->url);
+
         $sites = config('scrapers.sites');
         $site = $sites[$this->site];
 

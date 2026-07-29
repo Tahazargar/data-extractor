@@ -31,11 +31,6 @@ class ScrapeArchivePageJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if($this->page == 3){
-            Log::info('Scrape Limit reached at page 2');
-            return;
-        }
-
         $sites = config("scrapers.sites");
         $config = $sites[$this->site] ?? null;
 

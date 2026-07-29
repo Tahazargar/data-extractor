@@ -6,16 +6,21 @@ use Illuminate\Support\Facades\Log;
 use Modules\ContentProcessing\Models\ScrapedContent;
 use Modules\Crawling\DTOs\ScraperResult;
 use Modules\Crawling\Exceptions\InsertScrapedContentException;
+use Modules\Crawling\Services\Rules\ContentDeduplicator;
 
 class ContentStoreService
 {
+    public function __construct(
+        private readonly ContentDeduplicator $contentDeduplicator
+    ){}
+
     /**
      * @throws InsertScrapedContentException
      */
-    public static function store(ScraperResult $scraperResult): void
+    public function store(ScraperResult $scraperResult): void
     {
         try {
-            $exists = ScrapedContent::query()->where('content_hash', $scraperResult->contentHash)->exists();
+            $exists = $this->contentDeduplicator->isDuplicate($scraperResult->contentHash);
 
             if ($exists){
                 Log::info('Duplicated content skipped', [

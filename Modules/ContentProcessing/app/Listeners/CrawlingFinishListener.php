@@ -11,7 +11,9 @@ class CrawlingFinishListener
     /**
      * Create the event listener.
      */
-    public function __construct() {}
+    public function __construct(
+        private readonly ContentStoreService $contentStoreService,
+    ) {}
 
     /**
      * Handle the event.
@@ -19,6 +21,6 @@ class CrawlingFinishListener
      */
     public function handle(CrawlingFinishEvent $event): void
     {
-        ContentStoreService::store($event->articleData);
+        $this->contentStoreService->store($event->articleData);
     }
 }
