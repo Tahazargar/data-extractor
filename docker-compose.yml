@@ -62,6 +62,7 @@ services:
         networks:
             - laravel_net
 
+
 networks:
     laravel_net:
         driver: bridge

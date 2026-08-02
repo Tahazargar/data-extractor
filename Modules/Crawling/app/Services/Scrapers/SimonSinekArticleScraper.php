@@ -2,9 +2,11 @@
 
 namespace Modules\Crawling\Services\Scrapers;
 
-use Carbon\Carbon;
+use Illuminate\Support\Carbon;
 use Modules\Crawling\Contracts\ArticleScraperInterface;
+use Modules\Crawling\DTOs\ArticleLinkData;
 use Modules\Crawling\DTOs\ScraperResult;
+use Modules\Crawling\Enums\ScrapeStatusEnum;
 use Modules\Crawling\Support\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -31,8 +33,6 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
         // Transform to CarbonInterface
         $datePublished = Carbon::parse($datePublished);
 
-        $status = "successful";
-
         $domain = Helpers::extractDomain($url);
 
         return ScraperResult::successfulScrapeArticle(
@@ -43,7 +43,7 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
             contentHash: $contentHash,
             author: $author,
             readTime: $readTime,
-            status: $status,
+            status: ScrapeStatusEnum::Successful,
             date: $datePublished,
         );
     }
@@ -54,7 +54,7 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
         @$dom->loadHTML($html);
         $xpath = new \DOMXPath($dom);
 
-        $urls = [];
+        $articles = [];
 
         // Adjust selector to match the actual <a> inside <article>
         $nodes = $xpath->query('//article//a[@href]');
@@ -66,9 +66,16 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
                 $href = "https://simonsinek.com" . $href;
             }
 
-            $urls[] = $href;
+            $publishedAtNode = $xpath->query('.//p/span[1]', $node)->item(0);
+
+            $publishedAt = Carbon::parse($publishedAtNode?->textContent);
+
+            $articles[$href] = new ArticleLinkData(
+                url: $href,
+                publishedAt: $publishedAt,
+            );
         }
 
-        return array_unique($urls);
+        return $articles;
     }
 }

@@ -2,16 +2,18 @@
 
 namespace Modules\Crawling\Jobs;
 
+use Carbon\CarbonInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Modules\Crawling\Exceptions\FailedScrapeUrlException;
 use Modules\Crawling\Exceptions\ScraperConfigNotFoundException;
-use Modules\Crawling\Services\Scrapers\SimonSinekArticleScraper;
 
 class ScrapeArchivePageJob implements ShouldQueue
 {
@@ -22,7 +24,8 @@ class ScrapeArchivePageJob implements ShouldQueue
      */
     public function __construct(
         private readonly string $site,
-        private readonly int $page
+        private readonly int $page,
+        private readonly ?Carbon $since = null,
     ) {}
 
     /**
@@ -59,12 +62,40 @@ class ScrapeArchivePageJob implements ShouldQueue
             return;
         }
 
-        foreach ($articleUrls as $index => $articleUrl) {
-            $delay = rand(15, 30) * ($index + 1);
-            ScrapeArticleJob::dispatch($this->site, $articleUrl)->delay(now()->addSeconds($delay));
+        $cacheKey = "last_article_date:{$this->site}";
+        $threshold = $this->since ?? $this->cachedThreshold($cacheKey);
+
+        $newArticleUrls = [];
+        $shouldStopPagination = false;
+
+        foreach ($articleUrls as $articleUrl){
+            if($threshold && $articleUrl->publishedAt !== null && $articleUrl->publishedAt->lte($threshold)){
+                $shouldStopPagination = true;
+                break;
+            }
+
+            $newArticleUrls[] = $articleUrl;
         }
 
-        $nextPageDelay = rand(30, 60);
-        self::dispatch($this->site, $this->page + 1)->delay(now()->addSeconds($nextPageDelay));
+        foreach ($newArticleUrls as $index => $articleUrl) {
+            $delay = rand(15, 30) * ($index + 1);
+            ScrapeArticleJob::dispatch($this->site, $articleUrl->url)->delay(now()->addSeconds($delay));
+        }
+
+        if (!empty($newArticleUrls) && $newArticleUrls[0]->publishedAt !== null) {
+            Cache::forever($cacheKey, $newArticleUrls[0]->publishedAt->toDateTimeString());
+        }
+
+        if (!$shouldStopPagination) {
+            $nextPageDelay = rand(30, 60);
+            self::dispatch($this->site, $this->page + 1, $this->since)
+                ->delay(now()->addSeconds($nextPageDelay));
+        }
+    }
+
+    private function cachedThreshold(string $cacheKey): ?CarbonInterface
+    {
+        $cached = Cache::get($cacheKey);
+        return $cached ? Carbon::parse($cached) : null;
     }
 }
