@@ -23,9 +23,9 @@ class ScrapeArchivePageJob implements ShouldQueue
      * Create a new job instance.
      */
     public function __construct(
-        private readonly string $site,
-        private readonly int $page,
-        private readonly ?Carbon $since = null,
+        public readonly string $site,
+        public readonly int $page,
+        public readonly ?Carbon $since = null,
     ) {}
 
     /**
