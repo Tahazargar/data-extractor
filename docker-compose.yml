@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
     # Laravel App Container
     app:
@@ -62,6 +60,17 @@ services:
         networks:
             - laravel_net
 
+    # Cloudflare Bot Challenge Solver
+    flaresolverr:
+        image: ghcr.io/flaresolverr/flaresolverr:latest
+        container_name: flaresolverr
+        restart: unless-stopped
+        ports:
+            - "8191:8191"
+        environment:
+            - LOG_LEVEL=info
+        networks:
+            - laravel_net
 
 networks:
     laravel_net:

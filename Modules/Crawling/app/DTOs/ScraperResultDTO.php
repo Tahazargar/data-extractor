@@ -5,7 +5,7 @@ namespace Modules\Crawling\DTOs;
 use Carbon\CarbonInterface;
 use Modules\Crawling\Enums\ScrapeStatusEnum;
 
-readonly class ScraperResult
+readonly class ScraperResultDTO
 {
     public function __construct(
         public string            $title,
@@ -42,7 +42,7 @@ readonly class ScraperResult
         ];
     }
 
-    public static function successfulScrapeArticle(string $title, string $content, string $domain, string $url, string $contentHash, ?string $author = null, ?int $readTime = null, ?string $categories = null, ?string $tags = null, ?ScrapeStatusEnum $status = null, ?CarbonInterface $date = null): ScraperResult
+    public static function successfulScrapeArticle(string $title, string $content, string $domain, string $url, string $contentHash, ?string $author = null, ?int $readTime = null, ?string $categories = null, ?string $tags = null, ?ScrapeStatusEnum $status = null, ?CarbonInterface $date = null): ScraperResultDTO
     {
         return new self(
             title: $title,
@@ -59,7 +59,7 @@ readonly class ScraperResult
         );
     }
 
-    public static function failedScrapeArticle(string $title, string $content, string $domain, string $url, string $contentHash, ?string $author = null, ?int $readTime = null, ?string $categories = null, ?string $tags = null, ?CarbonInterface $date = null, ?ScrapeStatusEnum $status = null, ?array $errors = null): ScraperResult
+    public static function failedScrapeArticle(string $title, string $content, string $domain, string $url, string $contentHash, ?string $author = null, ?int $readTime = null, ?string $categories = null, ?string $tags = null, ?CarbonInterface $date = null, ?ScrapeStatusEnum $status = null, ?array $errors = null): ScraperResultDTO
     {
         return new self(
             title: $title,

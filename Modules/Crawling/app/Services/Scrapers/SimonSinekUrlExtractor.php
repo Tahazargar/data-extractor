@@ -3,20 +3,19 @@
 namespace Modules\Crawling\Services\Scrapers;
 
 use Illuminate\Support\Carbon;
-use Modules\Crawling\Contracts\ArticleScraperInterface;
+use Modules\Crawling\Contracts\UrlExtractorInterface;
 use Modules\Crawling\DTOs\ArticleLinkData;
-use Modules\Crawling\DTOs\ScraperResult;
+use Modules\Crawling\DTOs\ScraperResultDTO;
 use Modules\Crawling\Enums\ScrapeStatusEnum;
 use Modules\Crawling\Support\Helpers;
 use Symfony\Component\DomCrawler\Crawler;
 
-class SimonSinekArticleScraper implements ArticleScraperInterface
+class SimonSinekUrlExtractor implements UrlExtractorInterface
 {
-    public static function parseDetails(string $html, string $url): ScraperResult
+    public function parseDetails(string $url, string $html): ScraperResultDTO
     {
         $crawler = new Crawler($html);
 
-        // Example: Extract title
         $title = $crawler->filter('h1')->text();
 
         // Example: Extract content while preserving HTML structure for bold/subtitles
@@ -35,7 +34,7 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
 
         $domain = Helpers::extractDomain($url);
 
-        return ScraperResult::successfulScrapeArticle(
+        return ScraperResultDTO::successfulScrapeArticle(
             title: $title,
             content: $content,
             domain: $domain,
@@ -48,7 +47,7 @@ class SimonSinekArticleScraper implements ArticleScraperInterface
         );
     }
 
-    public static function extractArticleUrls(string $html): array
+    public function extractUrls(string $html): array
     {
         $dom = new \DOMDocument();
         @$dom->loadHTML($html);

@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
 use Modules\Crawling\Jobs\ScrapeArchivePageJob;
 
-class ScrapeArchives extends Command
+class ScrapeArchivesCommand extends Command
 {
     /**
      * The name and signature of the console command.

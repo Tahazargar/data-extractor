@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Modules\Crawling\Events\CrawlingFinishEvent;
 use Modules\Crawling\Exceptions\ScrapeArticleJobFailedException;
+use Modules\Crawling\Services\Fetchers\FlareSolverrFetcher;
+use Modules\Crawling\Services\Fetchers\SimpleHttpFetcher;
 use Modules\Crawling\Services\Rules\FetchRule;
 
 final class ScrapeArticleJob implements ShouldQueue
@@ -22,8 +24,8 @@ final class ScrapeArticleJob implements ShouldQueue
     public int $timeout = 300;
 
     public function __construct(
-        private readonly string $site,
-        private readonly string $url,
+        public readonly string $site,
+        public readonly string $url,
     ) {}
 
     /**
@@ -39,17 +41,18 @@ final class ScrapeArticleJob implements ShouldQueue
 
         $scraperClass = $site['concreteService'];
 
-        $response = Http::withHeaders([
-            'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-        ])->get($this->url);
+        $fetcher = ($site['bypassBot'] ?? false)
+        ? new FlareSolverrFetcher()
+            : new SimpleHttpFetcher();
 
-        if(!$response->ok()){
+        try {
+            $html = $fetcher->fetch($this->url);
+        } catch (ScrapeArticleJobFailedException) {
             $this->release(60);
-
             throw new ScrapeArticleJobFailedException($this->url);
         }
 
-        $articleData = $scraperClass::parseDetails($response->body(), $this->url);
+        $articleData = (new $scraperClass())->parseDetails($this->url, $html);
 
         CrawlingFinishEvent::dispatch($articleData);
     }

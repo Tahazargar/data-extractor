@@ -4,7 +4,7 @@ namespace Modules\ContentProcessing\Services;
 
 use Illuminate\Support\Facades\Log;
 use Modules\ContentProcessing\Models\ScrapedContent;
-use Modules\Crawling\DTOs\ScraperResult;
+use Modules\Crawling\DTOs\ScraperResultDTO;
 use Modules\Crawling\Exceptions\InsertScrapedContentException;
 use Modules\Crawling\Services\Rules\ContentDeduplicator;
 
@@ -17,7 +17,7 @@ class ContentStoreService
     /**
      * @throws InsertScrapedContentException
      */
-    public function store(ScraperResult $scraperResult): void
+    public function store(ScraperResultDTO $scraperResult): void
     {
         try {
             $exists = $this->contentDeduplicator->isDuplicate($scraperResult->contentHash);

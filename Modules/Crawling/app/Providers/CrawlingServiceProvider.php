@@ -2,7 +2,8 @@
 
 namespace Modules\Crawling\Providers;
 
-use Modules\Crawling\Console\ScrapeArchives;
+use Modules\Crawling\Console\ScrapeArchivesCommand;
+use Modules\Crawling\Console\ScrapeEmailsCommand;
 use Nwidart\Modules\Support\ModuleServiceProvider;
 use Illuminate\Console\Scheduling\Schedule;
 
@@ -35,11 +36,20 @@ class CrawlingServiceProvider extends ModuleServiceProvider
         RouteServiceProvider::class,
     ];
 
+    public function register(): void
+    {
+        $this->mergeConfigFrom(
+            module_path('Crawling', 'config/crawling.php'),
+            'crawling'
+        );
+    }
+
     public function boot(): void
     {
         if($this->app->runningInConsole()){
             $this->commands([
-                ScrapeArchives::class,
+                ScrapeArchivesCommand::class,
+                ScrapeEmailsCommand::class,
             ]);
         }
     }
