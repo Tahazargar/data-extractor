@@ -35,4 +35,12 @@ return [
         ],
     ],
 
+    'gmail' => [
+        'client_id' => env('GMAIL_CLIENT_ID'),
+        'client_secret' => env('GMAIL_CLIENT_SECRET'),
+        'redirect_uri' => env('GMAIL_REDIRECT_URI'),
+        'token_uri' => env('GMAIL_TOKEN_URI', 'https://oauth2.googleapis.com/token'),
+        'token_path' => env('GMAIL_TOKEN_PATH', 'storage/app/gmail_token.json'),
+    ],
+
 ];

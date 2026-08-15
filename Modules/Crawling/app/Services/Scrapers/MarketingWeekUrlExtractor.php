@@ -4,6 +4,7 @@ namespace Modules\Crawling\Services\Scrapers;
 
 use Illuminate\Support\Carbon;
 use Modules\Crawling\Contracts\UrlExtractorInterface;
+use Modules\Crawling\DTOs\ArticleLinkData;
 use Modules\Crawling\DTOs\ScraperResultDTO;
 use Modules\Crawling\Enums\ScrapeStatusEnum;
 use Modules\Crawling\Support\Helpers;
@@ -65,6 +66,31 @@ class MarketingWeekUrlExtractor implements UrlExtractorInterface
 
     public function extractUrls(string $html): array
     {
-        return [];
+        $dom = new \DOMDocument();
+        @$dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        $xpath = new \DOMXPath($dom);
+
+        $articles = [];
+
+        $links = $xpath->query('//a[contains(translate(text(), "READMORE ", "readmore"), "read more")]');
+
+        foreach ($links as $link) {
+            $href = trim($link->getAttribute('href'));
+
+            if (empty($href) || str_starts_with($href, '#')) {
+                continue;
+            }
+
+            if (str_starts_with($href, '/')) {
+                $href = 'https://www.marketingweek.com' . $href;
+            }
+
+            $articles[$href] = new ArticleLinkData(
+                url: $href,
+                publishedAt: null,
+            );
+        }
+
+        return $articles;
     }
 }

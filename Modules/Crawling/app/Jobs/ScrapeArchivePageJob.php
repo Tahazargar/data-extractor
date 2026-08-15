@@ -55,7 +55,7 @@ class ScrapeArchivePageJob implements ShouldQueue
             throw new FailedScrapeUrlException("Crawl failed with response: {$response->body()} at URL: {$url}");
         }
 
-        $articleUrls = $scraperClass::extractArticleUrls($response->body());
+        $articleUrls = $scraperClass::extractUrls($response->body());
 
         if(empty($articleUrls)){
             Log::info("No articles found for site: {$this->site}");
