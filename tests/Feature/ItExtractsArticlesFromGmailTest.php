@@ -64,28 +64,37 @@ HTML;
 
 it('dispatches scrape jobs for each extracted URL', function (): void {
     $html = <<<HTML
-<table>
-  <tbody><tr><td>
-    <table style="background-color:#e71e4a">
-      <tbody><tr><td>
-        <table><tbody><tr><td>
-          <div><p style="text-align:center">
-            <span><strong>Editor's Picks</strong></span>
-          </p></div>
-        </td></tr></tbody></table>
-      </td></tr></tbody></table>
-  </td></tr></tbody>
-</table>
-<table>
-  <tbody><tr><td>
-    <pre><a href="https://marketingweek.com/article-1"><u>READ MORE</u></a></pre>
-  </td></tr></tbody>
-</table>
-<table>
-  <tbody><tr><td>
-    <pre><a href="https://marketingweek.com/article-2"><u>READ MORE</u></a></pre>
-  </td></tr></tbody>
-</table>
+<div>
+  <div class="layout-grid-cell-content-mso">
+    <div>
+      <table style="background-color:#e71e4a">
+        <tbody><tr><td>
+          <table><tbody><tr><td>
+            <div><p><strong>Editor's Picks</strong></p></div>
+          </td></tr></tbody></table>
+        </td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="layout-grid-cell-content-mso">
+    <div>
+      <table>
+        <tbody><tr><td>
+          <pre><a href="https://marketingweek.com/article-1"><u>READ MORE</u></a></pre>
+        </td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="layout-grid-cell-content-mso">
+    <div>
+      <table>
+        <tbody><tr><td>
+          <pre><a href="https://marketingweek.com/article-2"><u>READ MORE</u></a></pre>
+        </td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
 HTML;
 
     // Bind GmailClientService mock FIRST to prevent real OAuth resolution
